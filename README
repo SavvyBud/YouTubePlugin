@@ -1,0 +1,44 @@
+YouTube is a massive collection of videos. Google provides the "Zend" youTube API in php and other languages, which allows programmatic access to a user's playlist, user's subscriptions and user's favourite lists. I decided to tap into this zend YouTube API to build a youTube plugin. Following are the characteristics of this plugin:
+
+1. It is written entirely in php and uses zend youTube php libraries.
+2. Currently it downloads videos from a user's public favorite and playlists.
+3. It downloads the youTube videos as mp4 file (video:mpeg4, audio codec: acc) with a resolution which allows these files to be played on iPod.
+4. It uses cclive (it is available on yum or apt repository) to download video entries.
+
+References:
+The youTube API is available at:
+http://code.google.com/apis/youtube/2.0/developers_guide_php.html
+
+Prerequisite
+1. You have a mythtv user (in my case I call it mythtv and I have auto login enabled for this user). The home dir for this user is /home/mythtv. Please replace it appropriately if you are using a different mythtv user.
+2. Provide sudo permission to mythtv user. This is needed because the playlist xml files has to be created in /usr/share/mythtv directory.
+3. Install the Google's youTube zend API. I have it installed in ~/opt folder of mythtv user.
+
+
+Configuration Steps:
+
+1. Integrating into the mythtv menu: The mythtv is installed by default in the following folder (on fedora): "/usr/share/mythtv". The mainmenu.xml is the entry point for the mythTV GUI for building the menu. I added the following to the mainmenu.xml file:
+
+<button>
+<type>MOVIETIMES</type>
+<text>YouTube Favorites</text>
+<action>MENU youTube_plugin.xml</action>
+</button>;
+
+as a child node of mythmenu element
+
+2. Creating the youTube plugin xml file link: create a soft link youTube_plugin.xml pointing to -> /home/mythtv/.mythtv/youTube_plugin.xml
+
+cd /usr/share/mythtv
+sudo ln -s /home/mythtv/.mythtv/youTube_plugin.xml
+
+3. Install the youTubeFav.php plugin, chmod +x it and configure it to run as a cron job nightly.
+
+4. Setup the youtube account ids in the ~/.youTubeCfg file
+USERS_LIST=<youtube user ids seperated by commas>
+DOWNLOAD=1
+DOWNLOAD_DIR=x # not currently used
+CREATE_PLAYLISTS=1
+DOWNLOAD_FAVORITES_VIDEOS=0
+DOWNLOAD_PLAYLIST_VIDEOS=1
+
